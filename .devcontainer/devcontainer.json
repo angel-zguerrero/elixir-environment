@@ -1,0 +1,13 @@
+{
+  "name": "Elixir Dev Container",
+  "dockerComposeFile": "./docker-compose.yaml",
+  "workspaceFolder": "/elixir-environment",
+  "service": "elixir-environment",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/sh"
+  },
+  "extensions": [
+    "jakebecker.elixir-ls"
+  ],
+  "forwardPorts": []
+}
