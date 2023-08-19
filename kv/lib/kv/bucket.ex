@@ -19,7 +19,17 @@ defmodule KV.Bucket do
   Puts the `value` for the given `key` in the `bucket`.
   """
   def put(bucket, key, value) do
-    Agent.update(bucket, &Map.put(&1, key, value))
+    IO.puts("Calling Agent update")
+   result = Agent.update(bucket, fn map ->
+        IO.puts("updating map")
+        Process.sleep(3000)
+        Map.put(map, key, value)
+        IO.puts("updated map")
+        map
+    end)
+    IO.puts("Called Agent update")
+    IO.puts("All the above code was executed synchronously")
+    result
   end
 
   def delete(bucket, key) do
