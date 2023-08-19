@@ -20,14 +20,17 @@ defmodule KV.Bucket do
   """
   def put(bucket, key, value) do
     IO.puts("Calling Agent update")
+    IO.inspect(self())
    result = Agent.update(bucket, fn map ->
         IO.puts("updating map")
+        IO.inspect(self())
         Process.sleep(3000)
-        Map.put(map, key, value)
+        map = Map.put(map, key, value)
         IO.puts("updated map")
         map
     end)
     IO.puts("Called Agent update")
+    IO.inspect(self())
     IO.puts("All the above code was executed synchronously")
     result
   end
