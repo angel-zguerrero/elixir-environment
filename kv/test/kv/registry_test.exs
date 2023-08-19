@@ -2,8 +2,9 @@ defmodule KV.RegistryTest do
   use ExUnit.Case, async: true
 
   setup context do
-    registry = start_supervised!(KV.Registry) # We are using this function due to it call "KV.Registry.start_link" and shutdown the KV.Registry pid before each test
-    %{registry: registry, test_name: context.test}
+    #registry = start_supervised!(KV.Registry) # We are using this function due to it call "KV.Registry.start_link" and shutdown the KV.Registry pid before each test
+    _ = start_supervised!({KV.Registry, name: context.test})
+    %{registry: context.test, test_name: context.test}
   end
 
   test "spawns buckets", %{registry: registry, test_name: test_name} do
