@@ -24,7 +24,6 @@ defmodule KV.Bucket do
    result = Agent.update(bucket, fn map ->
         IO.puts("updating map")
         IO.inspect(self())
-        Process.sleep(3000)
         map = Map.put(map, key, value)
         IO.puts("updated map")
         map
