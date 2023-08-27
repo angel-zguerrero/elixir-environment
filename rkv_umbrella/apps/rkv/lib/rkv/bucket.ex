@@ -1,8 +1,8 @@
 defmodule Rkv.Bucket do
   use Agent, restart: :temporary
 
-  def start_link(name) do
-    Agent.start_link(fn -> %{} end, name: name)
+  def start_link(_opts) do
+    Agent.start_link(fn -> %{} end)
   end
 
   def put(agent, key, value) do

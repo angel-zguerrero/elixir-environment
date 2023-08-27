@@ -35,7 +35,7 @@ defmodule Rkv.Registry do
     if Map.has_key?(bucket_dictionary, name) do
       {:reply, :ok, {bucket_dictionary, bucket_references_dictionary}}
     else
-      {:ok, bucket} = DynamicSupervisor.start_child(KV.BucketSupervisor, Rkv.Bucket.child_spec(String.to_atom(name)))
+      {:ok, bucket} = DynamicSupervisor.start_child(KV.BucketSupervisor, Rkv.Bucket.child_spec())
       bucketRef = Process.monitor(bucket)
       bucket_dictionary = Map.put(bucket_dictionary, name, bucket)
       bucket_references_dictionary = Map.put(bucket_references_dictionary, bucketRef, name)
