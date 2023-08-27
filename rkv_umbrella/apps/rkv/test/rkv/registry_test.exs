@@ -27,4 +27,12 @@ defmodule Rkv.RegistryTest do
     Agent.stop(bucket)
     assert :error == Rkv.Registry.lookup(registry, test_bucket_name)
   end
+
+  test "test remove bucket on agent crash", %{registry: registry} do
+    test_bucket_name = "test_bucket"
+    assert :ok == Rkv.Registry.create(registry, test_bucket_name)
+    assert {:ok, bucket} = Rkv.Registry.lookup(registry, test_bucket_name)
+    Agent.stop(bucket, :shutdown)
+    assert :error == Rkv.Registry.lookup(registry, test_bucket_name)
+  end
 end

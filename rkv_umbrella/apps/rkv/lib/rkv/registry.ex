@@ -35,7 +35,7 @@ defmodule Rkv.Registry do
     if Map.has_key?(bucket_dictionary, name) do
       {:reply, :ok, {bucket_dictionary, bucket_references_dictionary}}
     else
-      {:ok, bucket} = Rkv.Bucket.start_link(String.to_atom(name))
+      {:ok, bucket} = DynamicSupervisor.start_child(KV.BucketSupervisor, Rkv.Bucket.child_spec(String.to_atom(name)))
       bucketRef = Process.monitor(bucket)
       bucket_dictionary = Map.put(bucket_dictionary, name, bucket)
       bucket_references_dictionary = Map.put(bucket_references_dictionary, bucketRef, name)
@@ -57,5 +57,14 @@ defmodule Rkv.Registry do
     {_bucket, bucket_dictionary} = Map.pop(bucket_dictionary, bucket_name)
     {_ref, bucket_references_dictionary} = Map.pop(bucket_references_dictionary, bucketRef)
     {:noreply, {bucket_dictionary, bucket_references_dictionary}}
+  end
+
+  def terminate(_reason, _state) do
+    buckets = DynamicSupervisor.which_children(KV.BucketSupervisor)
+    Enum.map(buckets, fn {_, bucket, _, _} ->
+      IO.inspect(bucket)
+      IO.inspect(Agent.stop(bucket))
+    end)
+    :ok
   end
 end
