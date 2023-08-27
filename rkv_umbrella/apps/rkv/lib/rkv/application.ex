@@ -8,7 +8,8 @@ defmodule Rkv.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {DynamicSupervisor, name: KV.BucketSupervisor, strategy: :one_for_one},
+      {Rkv.Registry, [name: Rkv.Registry, strategy: :one_for_rest]},
+      {DynamicSupervisor, name: KV.BucketSupervisor, strategy: :one_for_one}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
