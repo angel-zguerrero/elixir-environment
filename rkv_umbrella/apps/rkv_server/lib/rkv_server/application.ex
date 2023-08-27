@@ -7,13 +7,8 @@ defmodule RkvServer.Application do
 
   @impl true
   def start(_type, _args) do
-    # testing callig rkv app
-    {:ok, bucket} = Rkv.Bucket.start_link([])
-    IO.inspect(bucket)
-
     children = [
-      # Starts a worker by calling: RkvServer.Worker.start_link(arg)
-      # {RkvServer.Worker, arg}
+      {Task, fn -> RkvServer.TcpServer.accept(4040) end}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
