@@ -59,6 +59,12 @@ defmodule Rkv.Registry do
     {:noreply, {bucket_dictionary, bucket_references_dictionary}}
   end
 
+  def handle_info(msg, state) do
+    require Logger
+    Logger.debug("Unexpected message in Registry: #{inspect(msg)}")
+    {:noreply, state}
+  end
+
   def terminate(_reason, _state) do
     buckets = DynamicSupervisor.which_children(KV.BucketSupervisor)
     Enum.map(buckets, fn {_, bucket, _, _} ->
