@@ -15,20 +15,53 @@ defmodule RkvServer.Command do
     execute(parse(command))
   end
   def execute({:create, bucket}) do
-    {:ok, "#{bucket} CREATED\r\n"}
+    Rkv.Registry.create(Rkv.Registry, bucket)
+    {:ok, "OK\r\n"}
   end
   def execute({:delete, bucket}) do
-    {:ok, "#{bucket} DELETED\r\n"}
+    Rkv.Registry.delete(Rkv.Registry, bucket)
+    {:ok, "OK\r\n"}
   end
   def execute({:lookup, bucket}) do
-    {:ok, "Bucket: #{bucket}\r\n"}
+    lookupBucket(bucket, fn (bucketPid) ->
+      {:ok, "#{inspect(bucketPid)}\r\n"}
+    end)
+  end
+
+  def execute({:get, bucket, key}) do
+    lookupBucket(bucket, fn (bucketPid) ->
+      value = Rkv.Bucket.get(bucketPid, key)
+      {:ok, "#{value}\r\n"}
+    end)
+  end
+
+  def execute({:put, bucket, key, value}) do
+    lookupBucket(bucket, fn (bucketPid) ->
+      Rkv.Bucket.put(bucketPid, key, value)
+      {:ok, "OK\r\n"}
+    end)
+  end
+
+  def execute({:del, bucket, key}) do
+    lookupBucket(bucket, fn (bucketPid) ->
+      Rkv.Bucket.delete(bucketPid, key)
+      {:ok, "OK\r\n"}
+    end)
   end
 
   def execute({:error, :unknown_command}) do
     {:error, :unknown_command}
   end
 
-  def execute(mmsg) do
+  def execute(_mmsg) do
     {:error, :unknown_command}
+  end
+  def lookupBucket(bucket, callback) do
+
+    with {:ok, pid} <- Rkv.Registry.lookup(Rkv.Registry, bucket) do
+      callback.(pid)
+    else
+      _ -> {:ok, "Bucket not found\r\n"}
+    end
   end
 end
