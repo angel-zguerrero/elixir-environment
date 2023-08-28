@@ -15,13 +15,20 @@ defmodule RkvServer.TcpServer do
 
   defp serve(socket) do
     {:ok, msg} = read_line(socket)
-    IO.inspect(msg)
-    write_line(socket, msg)
+    write_line(socket,  RkvServer.Command.run(msg))
     serve(socket)
   end
 
   defp read_line(socket) do
     :gen_tcp.recv(socket, 0)
+  end
+
+  defp write_line(socket, {:error, :unknown_command}) do
+    :gen_tcp.send(socket, "Unknown command\r\n")
+  end
+
+  defp write_line(socket, {:ok, msg}) do
+    :gen_tcp.send(socket, msg)
   end
 
   defp write_line(socket, msg) do
