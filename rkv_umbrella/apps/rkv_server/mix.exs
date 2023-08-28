@@ -26,7 +26,8 @@ defmodule RkvServer.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rkv, in_umbrella: true}
+      {:rkv, in_umbrella: true},
+      {:phoenix_pubsub, "~> 2.1"}
     ]
   end
 end

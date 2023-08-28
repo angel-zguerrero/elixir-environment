@@ -9,7 +9,8 @@ defmodule RkvServer.Application do
   def start(_type, _args) do
     children = [
       Supervisor.child_spec({Task, fn -> RkvServer.TcpServer.accept(4040) end}, restart: :permanent),
-      {Task.Supervisor, name: Rkv.TaskSupervisorClient, strategy: :one_for_one}
+      {Task.Supervisor, name: Rkv.TaskSupervisorClient, strategy: :one_for_one},
+      {Phoenix.PubSub, name: Rkv.Server.PubSub}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
