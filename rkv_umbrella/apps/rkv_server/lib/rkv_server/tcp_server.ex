@@ -9,7 +9,9 @@ defmodule RkvServer.TcpServer do
 
   def accept_connection(socket) do
     {:ok, client} = :gen_tcp.accept(socket)
-    Task.start_link(fn -> serve(client) end)
+    {:ok, pid} = Task.Supervisor.start_child(Rkv.TaskSupervisorClient, fn -> serve(client) end)
+    :ok = :gen_tcp.controlling_process(client, pid)
+
     accept_connection(socket)
   end
 

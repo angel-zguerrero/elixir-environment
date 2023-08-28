@@ -27,4 +27,8 @@ defmodule RkvServer.Command do
   def execute({:error, :unknown_command}) do
     {:error, :unknown_command}
   end
+
+  def execute(mmsg) do
+    {:error, :unknown_command}
+  end
 end
