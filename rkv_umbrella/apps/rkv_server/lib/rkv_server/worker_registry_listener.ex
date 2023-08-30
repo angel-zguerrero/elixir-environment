@@ -1,6 +1,5 @@
 defmodule RkvServer.WorkerRegistryListener do
   use GenServer
-  alias Phoenix.PubSub
 
 
   def start_link(_opts) do
@@ -8,11 +7,17 @@ defmodule RkvServer.WorkerRegistryListener do
   end
 
   def init(_init_arg) do
-    PubSub.subscribe(Rkv.Server.PubSub, "worker:registry:listener")
+    Phoenix.PubSub.subscribe(Rkb.PubSub.Service, "worker:registry:listener")
+    IO.puts("*******************")
+    IO.inspect(self())
+    IO.puts("################")
+
+
     {:ok, []}
   end
   def handle_info(msg, state) do
     require Logger
+    IO.inspect(msg)
     Logger.debug("update route table here!!: #{inspect(msg)}")
     {:noreply, state}
   end

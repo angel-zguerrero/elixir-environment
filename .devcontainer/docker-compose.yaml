@@ -1,5 +1,8 @@
 version: "3"
 
+volumes:
+  elixir-redis:
+
 networks:
   ms-net:
     name: "ms-net"
@@ -13,6 +16,18 @@ services:
       dockerfile: ./Dockerfile   
     volumes:
       - ../:/elixir-environment
+    networks:
+      - ms-net
+      - im-internal-net
+  elixir-redis:
+    image: redis
+    volumes:
+      - elixir-redis:/data
+    expose:
+      - 6379
+    ports:
+      - 6379:6379      
+    restart: unless-stopped
     networks:
       - ms-net
       - im-internal-net

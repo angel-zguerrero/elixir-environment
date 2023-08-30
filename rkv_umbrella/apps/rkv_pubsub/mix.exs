@@ -1,12 +1,11 @@
-defmodule Rkv.MixProject do
+defmodule Rkb.PubSub.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :rkv,
+      app: :rkv_pubsub,
       version: "0.1.0",
       build_path: "../../_build",
-      config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.15",
@@ -19,14 +18,14 @@ defmodule Rkv.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Rkv.Application, []}
+      mod: {Rkb.PubSub.Application, []},
+      applications: [:phoenix_pubsub_redis]
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rkv_pubsub, in_umbrella: true},
       {:phoenix_pubsub_redis, "~> 3.0"}
     ]
   end
