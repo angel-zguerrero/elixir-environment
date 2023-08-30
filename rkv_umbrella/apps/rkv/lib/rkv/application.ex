@@ -6,7 +6,7 @@ defmodule Rkv.Application do
   use Application
   def heartBeat() do
     Process.sleep(1000)
-    Phoenix.PubSub.broadcast(Rkb.PubSub.Service, "worker:registry:listener", node())
+    Phoenix.PubSub.broadcast(Rkb.PubSub.Service, "worker:registry:listener", [node: node()])
     heartBeat()
   end
   @impl true
