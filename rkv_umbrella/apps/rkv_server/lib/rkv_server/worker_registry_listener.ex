@@ -13,7 +13,7 @@ defmodule RkvServer.WorkerRegistryListener do
   def handle_info(remote_node_info, state) do
     require Logger
     routing_table = Application.fetch_env!(:rkv_server, :routing_table)
-    Logger.debug("routing_table : #{inspect(routing_table)}")
+    #Logger.debug("routing_table : #{inspect(routing_table)}")
     time_life = 60
     current_time = DateTime.utc_now()
     ttl = DateTime.add(current_time, time_life, :second)

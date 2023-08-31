@@ -15,7 +15,8 @@ defmodule RkvServer.Command do
     execute(parse(command))
   end
   def execute({:create, bucket}) do
-    Rkv.Registry.create(Rkv.Registry, bucket)
+    #Rkv.Registry.create(Rkv.Registry, bucket)
+    RkvServer.Router.route(bucket)
     {:ok, "OK\r\n"}
   end
   def execute({:delete, bucket}) do
