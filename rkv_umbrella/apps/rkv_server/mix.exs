@@ -19,6 +19,7 @@ defmodule RkvServer.MixProject do
   def application do
     [
       extra_applications: [:logger, :runtime_tools],
+      env: [routing_table: %{}],
       mod: {RkvServer.Application, []}
     ]
   end

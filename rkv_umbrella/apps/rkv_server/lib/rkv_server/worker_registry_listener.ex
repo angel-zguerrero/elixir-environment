@@ -10,19 +10,22 @@ defmodule RkvServer.WorkerRegistryListener do
     {:ok, %{}}
   end
 
-  def handle_info(remote_node_info, route_table) do
+  def handle_info(remote_node_info, state) do
     require Logger
-    Logger.debug("route_table : #{inspect(route_table)}")
+    routing_table = Application.fetch_env!(:rkv_server, :routing_table)
+    Logger.debug("routing_table : #{inspect(routing_table)}")
     time_life = 60
     current_time = DateTime.utc_now()
     ttl = DateTime.add(current_time, time_life, :second)
-    route_table = Map.put(route_table, remote_node_info[:node], ttl)
+    routing_table = Map.put(routing_table, remote_node_info[:node], ttl)
     keys_to_remove =
-      Enum.filter(Map.keys(route_table), fn remote_node ->
-        node_ttl = route_table[remote_node]
+      Enum.filter(Map.keys(routing_table), fn remote_node ->
+        node_ttl = routing_table[remote_node]
         time_diff = DateTime.diff(node_ttl, current_time, :second)
         time_diff <= 0
       end)
-    {:noreply, Map.drop(route_table, keys_to_remove)}
+
+    Application.put_env(:rkv_server, :routing_table, Map.drop(routing_table, keys_to_remove))
+    {:noreply, state}
   end
 end
