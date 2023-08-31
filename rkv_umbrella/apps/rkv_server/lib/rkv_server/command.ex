@@ -15,12 +15,11 @@ defmodule RkvServer.Command do
     execute(parse(command))
   end
   def execute({:create, bucket}) do
-    #Rkv.Registry.create(Rkv.Registry, bucket)
-    RkvServer.Router.route(bucket)
+    RkvServer.Router.route(bucket, Rkv.Registry, :create, [Rkv.Registry, bucket])
     {:ok, "OK\r\n"}
   end
   def execute({:delete, bucket}) do
-    Rkv.Registry.delete(Rkv.Registry, bucket)
+    RkvServer.Router.route(bucket, Rkv.Registry, :delete, [Rkv.Registry, bucket])
     {:ok, "OK\r\n"}
   end
   def execute({:lookup, bucket}) do
@@ -59,7 +58,7 @@ defmodule RkvServer.Command do
   end
   def lookupBucket(bucket, callback) do
 
-    with {:ok, pid} <- Rkv.Registry.lookup(Rkv.Registry, bucket) do
+    with {:ok, pid} <- RkvServer.Router.route(bucket, Rkv.Registry, :lookup, [Rkv.Registry, bucket]) do
       callback.(pid)
     else
       _ -> {:ok, "Bucket not found\r\n"}

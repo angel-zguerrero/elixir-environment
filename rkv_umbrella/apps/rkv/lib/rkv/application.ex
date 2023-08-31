@@ -25,7 +25,8 @@ defmodule Rkv.Application do
           end
         },
         restart: :permanent
-      )
+      ),
+      {Task.Supervisor, name: Rkv.TaskRemoteCaller}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
