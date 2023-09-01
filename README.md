@@ -2,7 +2,6 @@
 
 In this repo I'm practicing with Mix and OTP; Agents, GenServers, Task, Supervisors, Distributed tasks, etc.
 
-I've configured a Dev container project for VS Code, when you open this project make sure to use "open in a container" option.
 
 # KV Umbrella
 This project is based into project [Mix and OPT](https://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html)
@@ -11,6 +10,12 @@ This project is based into project [Mix and OPT](https://elixir-lang.org/getting
 # RKV Umbrella
 
 This project is a variant of *KV Umbrella*; I've used **phoenix_pubsub_redis** to discover Rkv nodes Dynamically
+
+## Configuring RKV Umbrella
+
+I've configured a Dev container project for VS Code, when you open this project make sure to use "open in a container" option.
+
+If you don't have docker or not want to use Dev containers, can execute the commands to start the server and workers with your own redis configuration ej: `REDIS_HOST=localhost REDIS_PORT=6379 iex --sname server_rkv -S mix`
 
 ## Playing with RKV Umbrella
 
